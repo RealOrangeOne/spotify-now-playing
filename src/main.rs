@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate include_dir;
+
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use log::Level;
@@ -5,6 +8,8 @@ use simple_logger;
 
 mod utils;
 use utils::get_port;
+mod static_files;
+use static_files::serve_static;
 
 use askama::Template;
 
@@ -28,6 +33,7 @@ fn main() {
         App::new()
             .wrap(Logger::default())
             .route("/", web::get().to(index))
+            .route("/static/{filename:.*}", web::get().to(serve_static))
     })
     .bind(format!("127.0.0.1:{}", port))
     .unwrap()
