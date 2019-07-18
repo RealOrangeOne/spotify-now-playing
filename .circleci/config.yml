@@ -1,0 +1,18 @@
+version: 2.0
+
+jobs:
+    build:
+        docker:
+            - image: circleci/rust:latest
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                    - cargo-{{ checksum "Cargo.lock" }}
+            - run: rustup component add rustfmt
+            - run: cargo fmt -- --write-mode=diff
+            - run: cargo build --release
+            - save_cache:
+                key: cargo-{{ checksum "Cargo.lock" }}
+                paths:
+                    - ~/.cargo
