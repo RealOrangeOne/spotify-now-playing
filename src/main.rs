@@ -6,8 +6,19 @@ use simple_logger;
 mod utils;
 use utils::get_port;
 
+use askama::Template;
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate<'a> {
+    title: &'a str,
+}
+
 fn index() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
+    let template = IndexTemplate { title: "Test" };
+    return HttpResponse::Ok()
+        .content_type("text/html")
+        .body(template.render().unwrap());
 }
 
 fn main() {
