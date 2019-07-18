@@ -35,7 +35,7 @@ fn main() {
             .route("/", web::get().to(index))
             .route("/static/{filename:.*}", web::get().to(serve_static))
     })
-    .bind(format!("127.0.0.1:{}", port))
+    .bind(format!("0.0.0.0:{}", port))
     .unwrap()
     .run()
     .unwrap();
