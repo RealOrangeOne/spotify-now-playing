@@ -1,4 +1,4 @@
-use actix_web::{web, HttpRequest, HttpResponse, Responder, Scope};
+use actix_web::{web, HttpRequest, HttpResponse, Scope};
 use spotify_oauth::{SpotifyAuth, SpotifyCallback, SpotifyScope};
 use std::env;
 use std::str::FromStr;
@@ -9,7 +9,7 @@ pub fn spotify_auth() -> Scope {
         .route("/callback", web::get().to(callback));
 }
 
-fn authorize_user() -> impl Responder {
+fn authorize_user() -> HttpResponse {
     let auth = SpotifyAuth {
         scope: vec![SpotifyScope::UserReadPlaybackState],
         redirect_uri: "http://localhost:5000/auth/callback"
@@ -27,7 +27,7 @@ fn authorize_user() -> impl Responder {
         .finish();
 }
 
-fn callback(req: HttpRequest) -> impl Responder {
+fn callback(req: HttpRequest) -> HttpResponse {
     let abs_uri = "http://localhost:5000".to_owned() + req.uri().to_string().as_str();
     let spotify_callback = SpotifyCallback::from_str(&abs_uri).expect("Invalid callback request");
     println!("{:?}", spotify_callback);

@@ -2,7 +2,7 @@
 extern crate include_dir;
 
 use actix_web::middleware::Logger;
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpResponse, HttpServer};
 use log::Level;
 use simple_logger;
 
@@ -20,7 +20,7 @@ struct IndexTemplate<'a> {
     title: &'a str,
 }
 
-fn index() -> impl Responder {
+fn index() -> HttpResponse {
     let template = IndexTemplate { title: "Test" };
     return HttpResponse::Ok()
         .content_type("text/html")
