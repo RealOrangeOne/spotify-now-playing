@@ -10,6 +10,7 @@ mod utils;
 use utils::get_port;
 mod static_files;
 use static_files::serve_static;
+mod spotify;
 
 use askama::Template;
 
@@ -34,6 +35,7 @@ fn main() {
             .wrap(Logger::default())
             .route("/", web::get().to(index))
             .route("/static/{filename:.*}", web::get().to(serve_static))
+            .service(spotify::spotify_auth())
     })
     .bind(format!("0.0.0.0:{}", port))
     .unwrap()
